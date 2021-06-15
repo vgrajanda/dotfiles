@@ -1,2 +1,2 @@
 # dotfiles
-Repositorio personal para subir todos los archivos referentes a configuración
+All my personal configuration files for different tiling window managers and other applications
