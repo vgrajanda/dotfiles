@@ -1,8 +1,6 @@
-# vgrajanda qtile config file
+from typing import List  # noqa: F401
 
 import os, subprocess
-
-from typing import List  # noqa: F401
 
 from libqtile import bar, layout, widget, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
@@ -56,13 +54,27 @@ keys = [
 
     Key([mod, "control"], "r", lazy.restart(), desc="Restart Qtile"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-    Key([mod], "r", lazy.spawncmd(),
-        desc="Spawn a command using a prompt widget"),
+    Key([mod], "r", lazy.spawn("rofi -show run"),
+        desc="Rofi application launcher"),
 
     # Custom keybinds
-    Key([mod], "b", lazy.spawn("firefox"), desc="Launch web browser"),
-    Key([mod], "e", lazy.spawn("pcmanfm"), desc="Launch file manager"),
-    Key([mod], "r", lazy.spawn("rofi -show run"), desc="Run application")
+    Key([mod], "b", lazy.spawn("firefox"),
+        desc="Web Browser"),
+    Key([mod], "e", lazy.spawn("thunar"),
+        desc="File Manager"),
+    Key([mod], "f", lazy.window.toggle_fullscreen(),
+        desc="Set fullscreen on focused window"),
+    Key([mod, "shift"], "f", lazy.window.toggle_floating(),
+        desc="Set on focused window on floating mode"),
+
+    # Basic control keys
+    Key([], "XF86MonBrightnessUp", lazy.spawn("light -A 5")),
+    Key([], "XF86MonBrightnessDown", lazy.spawn("light -U 5")),
+
+    # Audio control
+    Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer set Master 10%+")),
+    Key([], "XF86AudioLowerVolume", lazy.spawn("amixer set Master 10%-")),
+    Key([], "XF86AudioMute", lazy.spawn("amixer set Master toggle")),
 ]
 
 groups = [Group(i) for i in "123456789"]
@@ -82,17 +94,16 @@ for i in groups:
         #     desc="move focused window to group {}".format(i.name)),
     ])
 
-layout_theme = { "border_width": 3,
-                 "margin": 12,
-                 "border_focus": "b48ead",
-                 "border_normal": "2e3440"
-               }
+layout_theme = {"border_width": 2,
+                "margin": 8,
+                "border_focus": "34BE82",
+                "border_normal": "1D2330"
+                }
 
 layouts = [
-    #layout.Columns(border_focus_stack=['#d75f5f', '#8f3d3d'], border_width=4),
     layout.MonadTall(**layout_theme),
-    layout.Max(),
-    # Try more layouts by unleashing below layouts.
+    # layout.Max(),
+    # layout.Columns(border_focus_stack=['#d75f5f', '#8f3d3d'], border_width=4),
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
     # layout.Matrix(),
@@ -116,30 +127,26 @@ screens = [
         top=bar.Bar(
             [
                 widget.GroupBox(
-                    font='JetBrainsMono Nerd Font',
-                    fontsize=11,
-                    this_current_screen_border='5e81ac',
-                    active='eceff4',
-                    inactive='4c566a',
-                    highlight_method='block',
-                    borderwidth=2,
-                    padding=3,
-                    margin=3,
-                    use_mouse_wheel=False,
-                    disable_drag=True
+                    background=None,
+                    highlight_method='line',
+                    highlight_color=['000000', '383838'],
+                    rounded=True,
+                    this_current_screen_border='34BE82',
+                    urgent_alert_method='line',
+                    urgent_border='CC7351'
                 ),
+                widget.Cmus(),
                 widget.Spacer(),
-                widget.Sep(),
-                widget.CPU(),
-                widget.Sep(),
-                widget.Systray(),
-                widget.Sep(),
-                widget.Clock(
-                    format='%Y-%m-%d %a %I:%M %p',
+                widget.Systray(
+                    background='000000',
+                    padding=8,
+                    icon_size=19
                 ),
+                widget.Clock(format='%Y-%m-%d %a %I:%M %p'),
             ],
             24,
-            background='#2e3440'
+            opacity=0.8,
+            margin=4,
         ),
     ),
 ]
@@ -168,22 +175,13 @@ floating_layout = layout.Floating(float_rules=[
     Match(title='branchdialog'),  # gitk
     Match(title='pinentry'),  # GPG key password entry
 ])
+
 auto_fullscreen = True
 focus_on_window_activation = "smart"
 reconfigure_screens = True
 
-# If things like steam games want to auto-minimize themselves when losing
-# focus, should we respect this or not?
 auto_minimize = True
 
-# XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
-# string besides java UI toolkits; you can see several discussions on the
-# mailing lists, GitHub issues, and other WM documentation that suggest setting
-# this string if your java app doesn't work correctly. We may as well just lie
-# and say that we're a working one by default.
-#
-# We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
-# java that happens to be on java's whitelist.
 wmname = "LG3D"
 
 @hook.subscribe.startup_once
