@@ -57,7 +57,10 @@ keys = [
     Key([mod], "r", lazy.spawn("rofi -show run"),
         desc="Rofi application launcher"),
 
-    # Custom keybinds
+    ##################
+    # Custom keybinds#
+    ##################
+
     Key([mod], "b", lazy.spawn("firefox"),
         desc="Web Browser"),
     Key([mod], "e", lazy.spawn("thunar"),
@@ -67,11 +70,18 @@ keys = [
     Key([mod, "shift"], "f", lazy.window.toggle_floating(),
         desc="Set on focused window on floating mode"),
 
+    # Window keybinds
+
+    Key([mod, "control"], "h", lazy.to_screen(0)),
+    Key([mod, "control"], "l", lazy.to_screen(1)),
+
     # Basic control keys
+    
     Key([], "XF86MonBrightnessUp", lazy.spawn("light -A 5")),
     Key([], "XF86MonBrightnessDown", lazy.spawn("light -U 5")),
 
     # Audio control
+
     Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer set Master 10%+")),
     Key([], "XF86AudioLowerVolume", lazy.spawn("amixer set Master 10%-")),
     Key([], "XF86AudioMute", lazy.spawn("amixer set Master toggle")),
@@ -137,11 +147,32 @@ screens = [
                 ),
                 widget.Cmus(),
                 widget.Spacer(),
-                widget.Systray(
-                    background='000000',
+                widget.Systray( background='000000',
                     padding=8,
                     icon_size=19
                 ),
+                widget.Clock(format='%Y-%m-%d %a %I:%M %p'),
+            ],
+            24,
+            opacity=0.8,
+            margin=4,
+        ),
+    ),
+
+    Screen(
+        top=bar.Bar(
+            [
+                widget.GroupBox(
+                    background=None,
+                    highlight_method='line',
+                    highlight_color=['000000', '383838'],
+                    rounded=True,
+                    this_current_screen_border='34BE82',
+                    urgent_alert_method='line',
+                    urgent_border='CC7351'
+                ),
+                widget.Cmus(),
+                widget.Spacer(),
                 widget.Clock(format='%Y-%m-%d %a %I:%M %p'),
             ],
             24,
