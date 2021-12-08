@@ -38,7 +38,6 @@ keys = [
     Key([mod, "control"], "j", lazy.layout.grow_down(),
         desc="Grow window down"),
     Key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
-    Key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes"),
 
     # Toggle between split and unsplit sides of stack.
     # Split = all windows displayed
@@ -66,9 +65,15 @@ keys = [
     Key([mod], "e", lazy.spawn("thunar"),
         desc="File Manager"),
     Key([mod], "f", lazy.window.toggle_fullscreen(),
-        desc="Set fullscreen on focused window"),
+        desc="Fullscreen mode"),
     Key([mod, "shift"], "f", lazy.window.toggle_floating(),
-        desc="Set on focused window on floating mode"),
+        desc="Floating window mode"),
+    Key([mod], "t", lazy.spawn("telegram-desktop"),
+        desc="Telegram"),
+    Key([mod], "m", lazy.spawn("spotify"),
+        desc="Spotify"),
+    Key([mod], "c", lazy.spawn("alacritty -e nvim /home/donja/.config/qtile/config.py"),
+        desc="Spotify"),
 
     # Window keybinds
 
@@ -87,37 +92,62 @@ keys = [
     Key([], "XF86AudioMute", lazy.spawn("amixer set Master toggle")),
 ]
 
+# Credits: DT
+# Setting group names
+
+def init_group_names():
+    return [("WWW", {'layout': 'monadtall'}),
+            ("DEV", {'layout': 'monadtall'}),
+            ("SYS", {'layout': 'monadtall'}),
+            ("TERM", {'layout': 'monadtall'}),
+            ("DOCS", {'layout': 'monadtall'}),
+            ("VBOX", {'layout': 'monadtall'}),
+            ("CHAT", {'layout': 'monadtall'}),
+            ("DIS", {'layout': 'monadtall'}),
+            ("MUS", {'layout': 'monadtall'})]
+
+def init_groups():
+    return [Group(name, **kwargs) for name, kwargs in group_names]
+
+if __name__ in ["config", "__main__"]:
+    group_names = init_group_names()
+    groups = init_groups()
+
+for i, (name, kwargs) in enumerate(group_names, 1):
+    keys.append(Key([mod], str(i), lazy.group[name].toscreen()))
+    keys.append(Key([mod, "shift"], str(i), lazy.window.togroup(name)))
+
+# Default config, just in case
+
+"""
 groups = [Group(i) for i in "123456789"]
 
 for i in groups:
     keys.extend([
-        # mod1 + letter of group = switch to group
         Key([mod], i.name, lazy.group[i.name].toscreen(),
             desc="Switch to group {}".format(i.name)),
 
-        # mod1 + shift + letter of group = switch to & move focused window to group
         Key([mod, "shift"], i.name, lazy.window.togroup(i.name, switch_group=True),
             desc="Switch to & move focused window to group {}".format(i.name)),
-        # Or, use below if you prefer not to switch to that group.
-        # # mod1 + shift + letter of group = move focused window to group
-        # Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
-        #     desc="move focused window to group {}".format(i.name)),
-    ])
+        Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
+            desc="move focused window to group {}".format(i.name)),
+])
+"""
 
 layout_theme = {"border_width": 2,
                 "margin": 8,
-                "border_focus": "34BE82",
-                "border_normal": "1D2330"
+                "border_focus": "FC85AE",
+                "border_normal": "252525"
                 }
 
 layouts = [
     layout.MonadTall(**layout_theme),
-    # layout.Max(),
+    layout.MonadWide(**layout_theme),
+    # layout.Max(**layout_theme),
     # layout.Columns(border_focus_stack=['#d75f5f', '#8f3d3d'], border_width=4),
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
     # layout.Matrix(),
-    # layout.MonadWide(),
     # layout.RatioTile(),
     # layout.Tile(),
     # layout.TreeTab(),
@@ -126,7 +156,7 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font='sans',
+    font='Hack Nerd Font',
     fontsize=12,
     padding=3,
 )
@@ -137,25 +167,49 @@ screens = [
         top=bar.Bar(
             [
                 widget.GroupBox(
-                    background=None,
-                    highlight_method='line',
-                    highlight_color=['000000', '383838'],
-                    rounded=True,
-                    this_current_screen_border='34BE82',
-                    urgent_alert_method='line',
-                    urgent_border='CC7351'
+                    margin=3,
+                    margin_x=0,
+                    padding=7,
+                    spacing=0,
+
+                    inactive='3A4750',
+                    highlight_method='block',
+                    rounded=False,
+                    this_current_screen_border='574B90',
+                    block_highlight_text_color='ffffff',
+                    urgent_alert_method='block',
+                    urgent_border='C37B89',
+                    other_current_screen_border='9E579D',
+                    other_screen_border='9E579D',
+
+                    disable_drag=True,
+                    use_mouse_wheel=False
                 ),
-                widget.Cmus(),
                 widget.Spacer(),
-                widget.Systray( background='000000',
-                    padding=8,
+                widget.Net(
+                    interface="wlp2s0"
+                ),
+                widget.Sep(
+                    padding=30,
+                    size_percent=100,
+                ),
+                widget.Systray( 
+                    padding=7,
                     icon_size=19
                 ),
-                widget.Clock(format='%Y-%m-%d %a %I:%M %p'),
+                widget.Sep(
+                    padding=30,
+                    size_percent=100,
+                ),
+                widget.Clock(
+                    format='%Y-%m-%d %a %I:%M %p',
+                    padding=7
+                ),
             ],
-            24,
+            26,
             opacity=0.8,
-            margin=4,
+            margin=5,
+            background='191A19'
         ),
     ),
 
@@ -163,21 +217,39 @@ screens = [
         top=bar.Bar(
             [
                 widget.GroupBox(
-                    background=None,
-                    highlight_method='line',
-                    highlight_color=['000000', '383838'],
-                    rounded=True,
-                    this_current_screen_border='34BE82',
-                    urgent_alert_method='line',
-                    urgent_border='CC7351'
+                    margin=3,
+                    margin_x=0,
+                    padding=7,
+                    spacing=0,
+
+                    inactive='3A4750',
+                    highlight_method='block',
+                    rounded=False,
+                    this_current_screen_border='574B90',
+                    block_highlight_text_color='ffffff',
+                    urgent_alert_method='block',
+                    urgent_border='C37B89',
+                    other_current_screen_border='9E579D',
+                    other_screen_border='9E579D',
+
+                    disable_drag=True,
+                    use_mouse_wheel=False
                 ),
-                widget.Cmus(),
                 widget.Spacer(),
-                widget.Clock(format='%Y-%m-%d %a %I:%M %p'),
+
+                #widget.Net(
+                #    interface="wlp2s0"
+                #),
+
+                widget.Clock(
+                    format='%Y-%m-%d %a %I:%M %p',
+                    padding=7
+                ),
             ],
-            24,
+            28,
             opacity=0.8,
-            margin=4,
+            margin=5,
+            background='191A19'
         ),
     ),
 ]
@@ -193,7 +265,7 @@ mouse = [
 
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: List
-follow_mouse_focus = False
+follow_mouse_focus = True
 bring_front_click = False
 cursor_warp = False
 floating_layout = layout.Floating(float_rules=[

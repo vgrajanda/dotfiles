@@ -85,7 +85,7 @@ font:
     family: Hack Nerd Font Mono
     style: Bold Italic
 
-  size: 9.5
+  size: 11.5
 
   # Offset is the extra space around each character. `offset.y` can be thought
   # of as modifying the line spacing, and `offset.x` as modifying the letter
@@ -110,83 +110,46 @@ font:
 # If `true`, bold text is drawn using the bright color variants.
 #draw_bold_text_with_bright_colors: false
 
+# Colors (Tokyo Night)
+# Source: https://github.com/zatchheems/tokyo-night-alacritty-theme
 colors:
   # Default colors
   primary:
-    background: '0x1e1e1e'
-    foreground: '0xa7a7a7'
+    background: '0x1a1b26'
+    foreground: '0xa9b1d6'
 
   # Normal colors
   normal:
-    black:   '0x1e1e1e'
-    red:     '0xcf6a4c'
-    green:   '0x8f9d6a'
-    yellow:  '0xf9ee98'
-    blue:    '0x7587a6'
-    magenta: '0x9b859d'
-    cyan:    '0xafc4db'
-    white:   '0xa7a7a7'
+    black:   '0x32344a'
+    red:     '0xf7768e'
+    green:   '0x9ece6a'
+    yellow:  '0xe0af68'
+    blue:    '0x7aa2f7'
+    magenta: '0xad8ee6'
+    cyan:    '0x449dab'
+    white:   '0x787c99'
 
   # Bright colors
   bright:
-    black:   '0x5f5a60'
-    red:     '0xcf6a4c'
-    green:   '0x8f9d6a'
-    yellow:  '0xf9ee98'
-    blue:    '0x7587a6'
-    magenta: '0x9b859d'
-    cyan:    '0xafc4db'
-    white:   '0xffffff'
+    black:   '0x444b6a'
+    red:     '0xff7a93'
+    green:   '0xb9f27c'
+    yellow:  '0xff9e64'
+    blue:    '0x7da6ff'
+    magenta: '0xbb9af7'
+    cyan:    '0x0db9d7'
+    white:   '0xacb0d0'
 
-# Bell
-
-# The bell is rung every time the BEL control character is received.
 #bell:
-  # Visual Bell Animation
-  #
-  # Animation effect for flashing the screen when the visual bell is rung.
-  #
-  # Values for `animation`:
-  #   - Ease
-  #   - EaseOut
-  #   - EaseOutSine
-  #   - EaseOutQuad
-  #   - EaseOutCubic
-  #   - EaseOutQuart
-  #   - EaseOutQuint
-  #   - EaseOutExpo
-  #   - EaseOutCirc
-  #   - Linear
   #animation: EaseOutExpo
-
-  # Duration of the visual bell flash in milliseconds. A `duration` of `0` will
-  # disable the visual bell animation.
   #duration: 0
-
-  # Visual bell animation color.
   #color: '#ffffff'
-
-  # Bell Command
-  #
-  # This program is executed whenever the bell is rung.
-  #
-  # When set to `command: None`, no command will be executed.
-  #
-  # Example:
-  #   command:
-  #     program: notify-send
-  #     args: ["Hello, World!"]
-  #
   #command: None
 
 background_opacity: 0.97
 
 #selection:
-  # This string contains all characters that are used as separators for
-  # "semantic words" in Alacritty.
   #semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"
-
-  # When set to `true`, selected text will be copied to the primary clipboard.
   #save_to_clipboard: false
 
 cursor:
@@ -194,8 +157,8 @@ cursor:
     #   - ▇ Block
     #   - _ Underline
     #   - | Beam
-    shape: Underline
-    blinking: Off
+    shape: Block
+    blinking: On
 
   #vi_mode_style: None
   #blink_interval: 750
