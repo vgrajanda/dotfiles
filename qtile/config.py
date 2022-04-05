@@ -1,13 +1,14 @@
-
 import os
 import subprocess
+
 from libqtile import bar, layout, widget, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
+from libqtile.dgroups import simple_key_binder
 
 mod = "mod4"
-terminal = "xterm"
+terminal = "alacritty"
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -31,18 +32,15 @@ keys = [
     Key([mod, "control"], "j", lazy.layout.grow_down(), desc="Grow window down"),
     Key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
     Key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes"),
-    # Toggle between split and unsplit sides of stack.
-    # Split = all windows displayed
-    # Unsplit = 1 window displayed, like Max layout, but still with
-    # multiple stack panes
+
     Key(
         [mod, "shift"],
         "Return",
         lazy.layout.toggle_split(),
         desc="Toggle between split and unsplit sides of stack",
     ),
+
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-    # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
@@ -51,34 +49,25 @@ keys = [
     # Custom keybindings
     Key([mod], "r", lazy.spawn('rofi -show run'), desc="Spawn a command using Rofi launcher"),
     Key([mod], "f", lazy.window.toggle_fullscreen()),
+    Key([mod], "o", lazy.next_screen(), desc='Next monitor')
 ]
 
-def init_group_names():
-    return [("WWW",  {'layout': 'monadtall'}),
-            ("DEV",  {'layout': 'monadtall'}),
-            ("SYS",  {'layout': 'monadtall'}),
-            ("TERM", {'layout': 'monadtall'}),
-            ("DOCS", {'layout': 'monadtall'}),
-            ("VBOX", {'layout': 'monadtall'}),
-            ("CHAT", {'layout': 'monadtall'}),
-            ("DIS",  {'layout': 'monadtall'}),
-            ("MUS",  {'layout': 'monadtall'})]
- 
-def init_groups():
-    return [Group(name, **kwargs) for name, kwargs in group_names]
- 
-if __name__ in ["config", "__main__"]:
-    group_names = init_group_names()
-    groups = init_groups()
- 
-for i, (name, kwargs) in enumerate(group_names, 1):
-    keys.append(Key([mod], str(i), lazy.group[name].toscreen()))
-    keys.append(Key([mod, "shift"], str(i), lazy.window.togroup(name)))
+groups = [
+    Group("a", label=""),
+    Group("b", label=""),
+    Group("c", label=""),
+    Group("d", label=""),
+    Group("e", label=""),
+    Group("f", label=""),
+    Group("g", label=""),
+    Group("h", label=""),
+    Group("i", label=""),
+]
 
 layout_theme = {
         "border_width": 2,
         "margin": 6,
-        "border_focus": "FC85AE",
+        "border_focus": "9FE6A0",
         "border_normal": "252525"
 }
 
@@ -99,7 +88,7 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font="sans",
+    font="Hack Nerd Font",
     fontsize=11,
     padding=3,
 )
@@ -112,25 +101,25 @@ screens = [
                 widget.GroupBox(
                     margin=3,
                     margin_x=0,
-                    padding=7,
+                    padding=6,
                     spacing=0,
 
                     inactive='3A4750',
-                    highlight_method='block',
+                    highlight_method='text',
                     rounded=False,
-                    this_current_screen_border='574B90',
+                    this_current_screen_border='4AA96C',
                     block_highlight_text_color='ffffff',
                     urgent_alert_method='block',
                     urgent_border='C37B89',
-                    other_current_screen_border='9E579D',
-                    other_screen_border='9E579D',
+                    other_current_screen_border='F55C47',
+                    other_screen_border='16817A',
 
                     disable_drag=True,
                     use_mouse_wheel=False
                 ),
                 widget.Spacer(),     
                 widget.Net(
-                    interface="enp0s3"
+                    interface="wlp2s0"
                 ),
                 widget.Sep(
                     padding=30,
@@ -151,7 +140,7 @@ screens = [
             ],
             26,
             opacity=1,
-            margin=2,
+            margin=6,
             background='191A19'
         ),
     ),
@@ -164,7 +153,7 @@ mouse = [
     Click([mod], "Button2", lazy.window.bring_to_front()),
 ]
 
-dgroups_key_binder = None
+dgroups_key_binder = simple_key_binder("mod4")
 dgroups_app_rules = []  # type: list
 follow_mouse_focus = False
 bring_front_click = False
