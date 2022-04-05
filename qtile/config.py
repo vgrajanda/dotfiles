@@ -49,7 +49,19 @@ keys = [
     # Custom keybindings
     Key([mod], "r", lazy.spawn('rofi -show run'), desc="Spawn a command using Rofi launcher"),
     Key([mod], "f", lazy.window.toggle_fullscreen()),
-    Key([mod], "o", lazy.next_screen(), desc='Next monitor')
+    Key([mod], "o", lazy.next_screen(), desc='Next monitor'),
+
+    # Audio
+    Key([], "XF86AudioRaiseVolume", lazy.spawn('amixer set Master 10%+')),
+    Key([], "XF86AudioLowerVolume", lazy.spawn('amixer set Master 10%-')),
+
+    Key([], "XF86AudioMute", lazy.spawn('amixer set Master toggle')),
+    Key([], "XF86AudioNext", lazy.spawn('playerctl next')),
+    Key([], "XF86AudioPrev", lazy.spawn('playerctl previous')),
+
+    # Brightness
+    Key([], "XF86MonBrightnessUp", lazy.spawn('light -A 5')),
+    Key([], "XF86MonBrightnessDown", lazy.spawn('light -U 5')),
 ]
 
 groups = [
@@ -67,8 +79,8 @@ groups = [
 layout_theme = {
         "border_width": 2,
         "margin": 6,
-        "border_focus": "9FE6A0",
-        "border_normal": "252525"
+        "border_focus": "d08770",
+        "border_normal": "2e3440"
 }
 
 layouts = [
@@ -89,12 +101,14 @@ layouts = [
 
 widget_defaults = dict(
     font="Hack Nerd Font",
-    fontsize=11,
+    fontsize=12,
     padding=3,
 )
 extension_defaults = widget_defaults.copy()
 
 screens = [
+    Screen(),
+
     Screen(
         bottom=bar.Bar(
             [
@@ -104,13 +118,13 @@ screens = [
                     padding=6,
                     spacing=0,
 
-                    inactive='3A4750',
+                    inactive='4c566a',
+                    active='eceff4',
                     highlight_method='text',
                     rounded=False,
-                    this_current_screen_border='4AA96C',
-                    block_highlight_text_color='ffffff',
-                    urgent_alert_method='block',
-                    urgent_border='C37B89',
+                    this_current_screen_border='d08770',
+                    urgent_alert_method='text',
+                    urgent_border='bf616a',
                     other_current_screen_border='F55C47',
                     other_screen_border='16817A',
 
@@ -123,15 +137,15 @@ screens = [
                 ),
                 widget.Sep(
                     padding=30,
-                    size_percent=100,
+                    size_percent=30,
                 ),
                 widget.Systray( 
-                    padding=7,
+                    padding=3,
                     icon_size=19
                 ),
                 widget.Sep(
                     padding=30,
-                    size_percent=100,
+                    size_percent=30,
                 ),
                 widget.Clock(
                     format='%Y-%m-%d %a %I:%M %p',
@@ -139,9 +153,9 @@ screens = [
                 ),
             ],
             26,
-            opacity=1,
-            margin=6,
-            background='191A19'
+            opacity=0.94,
+            margin=3,
+            background='2e3440'
         ),
     ),
 ]
