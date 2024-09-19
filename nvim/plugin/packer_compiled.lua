@@ -79,6 +79,11 @@ _G.packer_plugins = {
     path = "/home/doco/.local/share/nvim/site/pack/packer/start/auto-pairs",
     url = "https://github.com/jiangmiao/auto-pairs"
   },
+  ["ayu-vim"] = {
+    loaded = true,
+    path = "/home/doco/.local/share/nvim/site/pack/packer/start/ayu-vim",
+    url = "https://github.com/ayu-theme/ayu-vim"
+  },
   ["cmp-nvim-lsp"] = {
     loaded = true,
     path = "/home/doco/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp",

@@ -1,5 +1,15 @@
-alias ls="ls -aF --color=auto --group-directories-first"
-alias l="ls -lahF --color=auto --group-directories-first"
-alias ll="ls -lahF --color=auto --group-directories-first"
+# System
+alias upgrade="sudo apt-get update && sudo apt-get upgrade -y"
+alias ls="ls -lahF --color=auto"
+alias ll="ls -lahF --color=auto"
+alias l="ls -lahF --color=auto"
 
-alias update="sudo apt update && sudo apt upgrade -y" 
+# Programs
+alias cat="batcat"
+alias vim="nvim"
+alias vi="nvim"
+alias v="nvim"
+
+# Tmux
+alias t="tmux"
+alias tls="tmux ls"

@@ -11,8 +11,8 @@ return require('packer').startup(function(use)
   }
   use 'jiangmiao/auto-pairs'
   use 'vague2k/vague.nvim'
-  use('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
-
+  use 'ayu-theme/ayu-vim'
+  use ('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
 
   -- LSP Zero
   use({'VonHeikemen/lsp-zero.nvim', branch = 'v4.x'})
