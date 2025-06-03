@@ -1,0 +1,18 @@
+#
+# These things are run when an Openbox X Session is started.
+# You may place a similar script in $HOME/.config/openbox/autostart
+# to run user-specific things.
+#
+xrandr --output DP-0 --primary --mode 1920x1080 --rate 120
+
+picom &
+tint2 &
+nm-applet &
+conky-launch & # -> ~/.config/conky/launch.sh
+nitrogen --restore &
+dunst &
+sxhkd &
+
+polybar main &
+polybar main2 &
+polybar main3 &
