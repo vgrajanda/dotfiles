@@ -290,9 +290,14 @@
       </action>
     </keybind>
     <!-- Custom keybinds -->
+    <keybind key="W-l">
+      <action name="Execute">
+        <command>betterlockscreen -l dim</command>
+      </action>
+    </keybind>
     <keybind key="W-S-s">
       <action name="Execute">
-        <command>flameshot gui</command>
+        <command>sh -c "maim -s | xclip -selection clipboard -t image/png"</command>
       </action>
     </keybind>
     <keybind key="A-p">

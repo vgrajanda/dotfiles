@@ -4,14 +4,18 @@
 # to run user-specific things.
 #
 xrandr --output DP-0 --primary --mode 1920x1080 --rate 120
+setxkbmap -layout us -variant altgr-intl -option lv3:ralt_switch
+
+xset s off
+xset -dpms
+xset s noblank
 
 picom &
-tint2 &
 nm-applet &
-conky-launch & # -> ~/.config/conky/launch.sh
 nitrogen --restore &
 dunst &
 sxhkd &
+conky-launch & # -> ~/.config/conky/launch.sh
 
 polybar main &
 polybar main2 &
