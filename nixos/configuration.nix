@@ -22,7 +22,7 @@
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
+  # networking.proxy.default = "http://user:password@proxy:port/"; 
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
@@ -51,20 +51,19 @@
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
+  # Bluetooth support
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = false;
+  };
+
+  # NVIDIA Support
   hardware.graphics.enable = true;
   services.xserver.videoDrivers = ["nvidia"];
   hardware.nvidia.open = true;
   hardware.nvidia.modesetting.enable = true;
 
-  hardware = {
-    # pulseaudio.enable = true;
-    bluetooth = {
-      enable = true;
-      powerOnBoot = false;
-    };
-  };
-
-  # Enable sound with pipewire.
+  # Sound support with PipeWire
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -72,27 +71,17 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
+    jack.enable = true; # Jack needed for a couple applications
   };
-  services.blueman.enable = true;
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
+  services.blueman.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users."doco" = {
     isNormalUser = true;
     description = "doco";
     extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-    #  kdePackages.kate
-    #  thunderbird
-    ];
+    packages = with pkgs; [];
   };
 
   # Install firefox.
@@ -106,24 +95,35 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  # Programs
   environment.systemPackages = with pkgs; [
     # -- System Essentials --#
-    neovim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    neovim
     git
-    vscodium
     bluez
     wget
+
+    # -- Essential Applications --#
+    mullvad-vpn
+    ungoogled-chromium
+    vscodium
+    ytmdesktop
+    vesktop
+    telegram-desktop
  
     # -- Audio and Video -- #
     shotcut
-    ytmdesktop
 
     # -- Gaming -- #
     mangohud
     protonup-ng
     heroic
+    wowup-cf
+
+    # -- <Heart> -- #
+    godot
+    blender
+    krita
   ];
   
   environment.sessionVariables = {
