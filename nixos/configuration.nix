@@ -11,18 +11,17 @@
     ];
 
   # Bootloader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/vda";
-  boot.loader.grub.useOSProber = false;
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
   # Use latest kernel.
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_zen;
 
-  networking.hostName = "manus"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.hostName = "manus";
 
   # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/"; 
+  # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
@@ -39,8 +38,9 @@
   services.xserver.enable = false;
 
   # Enable the KDE Plasma Desktop Environment.
-  services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
+  services.displayManager.sddm.enable = true;
+  services.displayManager.sddm.wayland.enable = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -48,20 +48,23 @@
     variant = "altgr-intl";
   };
 
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
+  services.mullvad-vpn.enable = true;
+  services.mullvad-vpn.package = pkgs.mullvad-vpn;
 
-  # Bluetooth support
-  hardware.bluetooth = {
+  hardware.graphics = {
     enable = true;
-    powerOnBoot = false;
   };
 
-  # NVIDIA Support
-  hardware.graphics.enable = true;
   services.xserver.videoDrivers = ["nvidia"];
-  hardware.nvidia.open = true;
-  hardware.nvidia.modesetting.enable = true;
+
+  hardware.nvidia = {
+    modesetting.enable = true;
+    powerManagement.enable = false;
+    powerManagement.finegrained = false;
+    open = true;
+    nvidiaSettings = true;
+    package = config.boot.kernelPackages.nvidiaPackages.latest;
+  };
 
   # Sound support with PipeWire
   services.pulseaudio.enable = false;
@@ -71,10 +74,25 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    jack.enable = true; # Jack needed for a couple applications
+    jack.enable = true;
   };
 
-  services.blueman.enable = true;
+  # services.blueman.enable = true;
+
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+    settings = {
+      General = {
+        Enable = "Source,Sink,Media,Socket";
+        Experimental = true;
+        FastConnectable = true;
+      };
+      Policy = {
+        AutoEnable = true;
+      };
+    };
+  };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users."doco" = {
@@ -84,18 +102,20 @@
     packages = with pkgs; [];
   };
 
-  # Install firefox.
-  programs.firefox.enable = true;
+  # -- Programs -- #
+  # programs.firefox.enable = true;
+  programs.appimage = {
+    enable = true;
+    binfmt = true;
+  };
 
   # Steam
   programs.steam.enable = true;
   programs.steam.gamescopeSession.enable = true;
   programs.gamemode.enable = true;
 
-  # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # Programs
   environment.systemPackages = with pkgs; [
     # -- System Essentials --#
     neovim
@@ -104,7 +124,8 @@
     wget
 
     # -- Essential Applications --#
-    mullvad-vpn
+    # mullvad
+    # mullvad-vpn
     ungoogled-chromium
     vscodium
     ytmdesktop
@@ -118,14 +139,24 @@
     mangohud
     protonup-ng
     heroic
-    wowup-cf
 
     # -- <Heart> -- #
     godot
     blender
     krita
+
+    # -- KDE Apps -- #
+    kdePackages.kcalc
+    kdePackages.kclock
+    kdePackages.kcolorchooser
+    kdePackages.ksystemlog
+    kdePackages.partitionmanager
+    hardinfo2
+    wayland-utils
+    wl-clipboard
+    vlc
   ];
-  
+
   environment.sessionVariables = {
     STEAM_EXTRA_COMPAT_TOOLS_PATHS =
       "/home/doco/.steam/root/compatibilitytools.d";
@@ -157,4 +188,5 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "26.05"; # Did you read the comment?
+
 }
