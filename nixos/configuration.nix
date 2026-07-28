@@ -10,6 +10,8 @@
       ./hardware-configuration.nix
     ];
 
+  # ----- General System Config ----- #
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -47,9 +49,37 @@
     layout = "us";
     variant = "altgr-intl";
   };
+  
+  # Sound support with PipeWire
+  services.pulseaudio.enable = false;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    jack.enable = true;
+  };
 
-  services.mullvad-vpn.enable = true;
-  services.mullvad-vpn.package = pkgs.mullvad-vpn;
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+    settings = {
+      General = {
+        Enable = "Source,Sink,Media,Socket";
+        Experimental = true;
+        FastConnectable = true;
+      };
+      Policy = {
+        AutoEnable = true;
+      };
+    };
+  };
+  
+  # -------------------------------- #
+
+  # ----- NVIDIA ----- #
+
 
   hardware.graphics = {
     enable = true;
@@ -66,33 +96,7 @@
     package = config.boot.kernelPackages.nvidiaPackages.latest;
   };
 
-  # Sound support with PipeWire
-  services.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    jack.enable = true;
-  };
-
-  # services.blueman.enable = true;
-
-  hardware.bluetooth = {
-    enable = true;
-    powerOnBoot = true;
-    settings = {
-      General = {
-        Enable = "Source,Sink,Media,Socket";
-        Experimental = true;
-        FastConnectable = true;
-      };
-      Policy = {
-        AutoEnable = true;
-      };
-    };
-  };
+  # ---------------- #
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users."doco" = {
@@ -102,19 +106,30 @@
     packages = with pkgs; [];
   };
 
-  # -- Programs -- #
-  # programs.firefox.enable = true;
+  # ---- Gaming ---- #
+
   programs.appimage = {
     enable = true;
     binfmt = true;
   };
 
-  # Steam
+  services.flatpak.enable = true;
+
   programs.steam.enable = true;
   programs.steam.gamescopeSession.enable = true;
   programs.gamemode.enable = true;
+  
+  # ---------------- #
 
   nixpkgs.config.allowUnfree = true;
+
+  services.mullvad-vpn.enable = true;
+  services.mullvad-vpn.package = pkgs.mullvad-vpn;
+
+  virtualisation.virtualbox.host.enable = true;
+  users.extraGroups.vboxusers.members = [ "doco" ];
+  virtualisation.virtualbox.host.enable = true;
+  virtualisation.virtualbox.host.enableExtensionPack = true;
 
   environment.systemPackages = with pkgs; [
     # -- System Essentials --#
@@ -124,8 +139,6 @@
     wget
 
     # -- Essential Applications --#
-    # mullvad
-    # mullvad-vpn
     ungoogled-chromium
     vscodium
     ytmdesktop
@@ -144,6 +157,7 @@
     godot
     blender
     krita
+    libresprite
 
     # -- KDE Apps -- #
     kdePackages.kcalc
