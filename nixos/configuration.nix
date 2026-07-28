@@ -102,7 +102,7 @@
   users.users."doco" = {
     isNormalUser = true;
     description = "doco";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" ];
     packages = with pkgs; [];
   };
 
@@ -126,10 +126,8 @@
   services.mullvad-vpn.enable = true;
   services.mullvad-vpn.package = pkgs.mullvad-vpn;
 
-  virtualisation.virtualbox.host.enable = true;
-  users.extraGroups.vboxusers.members = [ "doco" ];
-  virtualisation.virtualbox.host.enable = true;
-  virtualisation.virtualbox.host.enableExtensionPack = true;
+  virtualisation.libvirtd.enable = true;
+  programs.virt-manager.enable = true;
 
   environment.systemPackages = with pkgs; [
     # -- System Essentials --#
@@ -137,6 +135,7 @@
     git
     bluez
     wget
+    dnsmasq # for virt-manager
 
     # -- Essential Applications --#
     ungoogled-chromium
